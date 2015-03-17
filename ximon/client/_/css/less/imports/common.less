@@ -1,0 +1,29 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	font-family: sans-serif;
+	touch-action: none;
+	-webkit-tap-highlight-color: transparent;	
+	background-color: @black;
+	color: @white;
+
+	.display(flex);
+}
+
+main {
+	.flex(1);
+	.display(flex);
+}
+
+.icon {
+	display: inline-block;
+}
+
+.template {
+	display: none !important;
+}
+
+.disabled {
+	opacity: .25;
+	.transition(opacity 333ms ease-out);
+}
