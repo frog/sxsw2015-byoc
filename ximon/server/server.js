@@ -56,7 +56,7 @@ var httpServer = http.createServer(function(request, response)
 
 app.init(httpServer);
 
-httpServer.listen(parseInt(config.httpServerPort, 10));
+httpServer.listen(config.httpServerPort);
 
 var ipAddresses = [];
 var networkInterfaces = os.networkInterfaces();

@@ -14,7 +14,7 @@ var gameState =
 
 control.init = function ()
 {
-	control.io = io("/control");
+	control.io = window.io("/control");
 
 	control.io.on("connect", function ()
 	{	

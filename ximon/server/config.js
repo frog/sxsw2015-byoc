@@ -3,7 +3,7 @@ var config =
 	httpServerPort: 80,
 	webRootDirName: "client",
 	defaultDocument: "player.htm",
-	isCachingDisabled: true,
+	isCachingDisabled: false,
 	doBrowserLaunch: false,
 	contentTypes: // TODO: add other MIME content type entries as needed for your specific web site or app
 	{
@@ -18,8 +18,8 @@ var config =
 		".ttf": "font/truetype",
 		".otf": "font/opentype",
 		".woff": "application/x-font-woff",
-		".mp3" : "audio/mpeg",
-		".mp4" : "video/mp4"
+		".mp3": "audio/mpeg",
+		".mp4": "video/mp4"
 	}
 };
 

@@ -40,13 +40,6 @@ var __player =
 	isConnected: false
 };
 
-function init(httpServer)
-{
-	io.attach(httpServer, { transports:["polling","websocket"] });
-
-	log("Web application initialized");
-}
-
 namespaces.player.on("connection", function (socket)
 {
 	socket.on("RegisterPlayer", function (id, callback)
@@ -97,6 +90,7 @@ namespaces.player.on("connection", function (socket)
 
 	socket.on("ButtonPressed", function (buttonId)
 	{
+		//log(socket.id + "|" + buttonId);
 		var player = game.players[socket.id];
 
 		if (player.errors < 3)
@@ -275,4 +269,8 @@ function getPlayerById(id)
 	return null;
 }
 
-module.exports.init = init;
+module.exports.init = function(httpServer)
+{
+	io.attach(httpServer, { transports:["polling","websocket"] });
+	log("Web application initialized");
+}

@@ -21,7 +21,7 @@ var gameState =
 
 player.init = function ()
 {
-	player.io = io("/player");
+	player.io = window.io("/player");
 
 	player.io.on("connect", function ()
 	{
