@@ -240,6 +240,16 @@ main {
 	}
 }
 
+#countdown {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 2em;
+	background-color: @grey;
+	.transform(translateX(-100%));
+}
+
 #watermark {
 	.flex(0 1 auto);
 
@@ -254,7 +264,7 @@ main {
 	height: 100vh;
 	color: @white;
 	font-size: 160px;
-	text-align: center;
+	text-align: right;
 	opacity: .333;
 
 	&.hidden {

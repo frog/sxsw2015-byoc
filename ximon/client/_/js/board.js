@@ -1,11 +1,19 @@
-var soundJs = window.createjs.Sound;
-
 var board =
 {
 	io: null,
-	playerTemplate: null,
-	sounds: []
+	playerTemplate: null
 };
+
+var gameState =
+{
+	WAITING: 1,
+	READY: 2,
+	STARTING: 3,
+	RUNNING: 4,
+	COMPLETED: 5
+};
+
+var soundJs = window.createjs.Sound;
 
 board.init = function ()
 {	
@@ -29,13 +37,11 @@ board.init = function ()
 	board.io.on("PlayersUpdated", function (players)
 	{
 		var keys = new Array(Object.keys(players).length);
-
 		for (var id in players)
 		{
 			keys[players[id].number - 1] = id;
 		}
-
-		for (var i = 0, ic = keys.length; i < ic; i++)
+		for (var i = 0, ic = keys.length; i < ic; i += 1)
 		{
 			board.updatePlayer(players[keys[i]]);
 		}
@@ -61,38 +67,43 @@ board.init = function ()
 		{
 			$(this).toggleClass("enabled", (index < _player.errors));
 		});
-		player.find(".stats").html(_player.stats.lastSequenceDuration + "s");
+		player.find(".stats").html(_player.stats.lastSequenceDuration / 1000 + "s");
 		player.find(".stats").toggleClass("success", (_player.stats.lastSequenceDuration > 0));
 		player.toggleClass("disabled", _player.errors == 3);
-		player.toggleClass("disconnected", !_player.isConnected);
+		player.toggleClass("disconnected", !_player.isConnected);	
 	};
 
-	board.io.on("ButtonPressed", function (args)
+	board.io.on("ButtonPressed", function (args) 
 	{
 		var button = $(".player:nth-child(" + (args.playerNumber) + ") > .buttons > .button:nth-child(" + args.buttonId + ")");
 		button.toggleClass("active", true);
 		setTimeout(function () { button.toggleClass("active", false); }, 100);
 	});
 
-	board.io.on("SequenceStarted", function (sequence)
+	board.io.on("SequenceStarted", function (game)
 	{
 		$("#watermark").toggleClass("hidden", true);
 		$("#winner").toggleClass("hidden", true);
 		$("#sequence").toggleClass("hidden", false);
-		$("#sequence .count").html(sequence.length);
+		$("#sequence .count").html(game.sequence.length);
+		$(".player").find(".stats").velocity("stop", true).velocity({ opacity: 1 });
 		setTimeout(function ()
 		{
-			var accel = sequence.length;
-			var intId = setInterval(function ()
+			var accel = game.sequence.length;
+			var sequenceInterval = setInterval(function ()
 			{
-				if (sequence.length == 0)
+				if (game.sequence.length == 0)
 				{
-					clearInterval(intId);
-					board.io.emit("RunSequence");
-					setTimeout(function () { $("#sequence").toggleClass("hidden", true); }, 750);
+					clearInterval(sequenceInterval);
+					setTimeout(function () 
+					{ 
+						board.io.emit("RunSequence");
+						$("#sequence").toggleClass("hidden", true);
+						$("#countdown").velocity({ translateX: [0, 0] }).velocity({ translateX: "-=100%" }, { duration: game.sequenceDuration - 500, easing: "linear" });
+					}, 750);
 					return;
 				}
-				var id = sequence.shift();
+				var id = game.sequence.shift();
 				soundJs.play(id);
 				var button = $("#sequence .button:nth-child(" + id + ")");
 				button.toggleClass("active", true);
@@ -101,7 +112,7 @@ board.init = function ()
 		}, 750);
 	});
 
-	board.io.on("SequenceCompleted", function (activePlayers)
+	board.io.on("SequenceCompleted", function ()
 	{
 		$("#sequence .count").html("");
 		$("#sequence").toggleClass("hidden", false);
@@ -115,12 +126,18 @@ board.init = function ()
 		{
 			$("#sequence").toggleClass("hidden", true);
 			$("#sequence .button").toggleClass("active", false);
-			if (activePlayers.length == 1)
-			{
-				$("#winner .number").html(activePlayers[0]);
-				$("#winner").toggleClass("hidden", false);
-			}
 		}, 1000);
+	});
+	
+	board.io.on("SequenceWon", function (playerNumber)
+	{
+		$(".player:nth-child(" + playerNumber + ")").find(".stats").velocity({ opacity: .2 }, { loop: true });
+	});
+	
+	board.io.on("GameWon", function (playerNumber)
+	{
+		$("#winner .number").html(playerNumber);
+		$("#winner").toggleClass("hidden", false);
 	});
 
 	board.io.on("GameReset", function ()

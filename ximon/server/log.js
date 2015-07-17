@@ -1,4 +1,9 @@
+var config = require("./config.js");
+
 module.exports = function log(message)
 {
-	console.log("[" + new Date().toJSON() + "]", message);
+	if (config.isLogOutputEnabled) 
+	{
+		console.log("[" + new Date().toJSON() + "]", message);
+	}
 };

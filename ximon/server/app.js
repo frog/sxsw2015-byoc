@@ -25,6 +25,7 @@ var game =
 	state: gameState.WAITING,
 	players: {},
 	sequence: [],
+	sequenceDuration: 0,
 	sequenceRunTimestamp: null
 };
 
@@ -90,7 +91,8 @@ namespaces.player.on("connection", function (socket)
 
 	socket.on("ButtonPressed", function (buttonId)
 	{
-		//log(socket.id + "|" + buttonId);
+		log(socket.id + "|" + buttonId);
+		
 		var player = game.players[socket.id];
 
 		if (player.errors < 3)
@@ -116,16 +118,16 @@ namespaces.player.on("connection", function (socket)
 
 						if (buttonId == game.sequence[player.sequenceIndex])
 						{
-							player.sequenceIndex++;
+							player.sequenceIndex += 1;
 							if (player.sequenceIndex == game.sequence.length)
 							{
 								player.isSequenceCompleted = true;
-								player.stats.lastSequenceDuration = (Date.now() - game.sequenceRunTimestamp) / 1000;
+								player.stats.lastSequenceDuration = Date.now() - game.sequenceRunTimestamp;
 							}
 						}
 						else
 						{
-							player.errors++;
+							player.errors += 1;
 							player.isSequenceCompleted = true;
 						}
 
@@ -167,7 +169,7 @@ namespaces.control.on("connection", function (socket)
 	socket.on("ResetGame", function () { resetGame(); });
 	socket.on("ShowDebug", function ()
 	{
-		//log(io.eio);
+		log(io.eio);
 		log(game);
 	});
 });
@@ -188,36 +190,75 @@ function startSequence()
 	}
 	updatePlayersToBoard();
 	game.sequence.push(Math.floor((Math.random() * 4) + 1));
+	game.sequenceDuration = 3000 + (game.sequence.length * 750); 
 	setGameState(gameState.STARTING);
-	namespaces.board.emit("SequenceStarted", game.sequence);
+	namespaces.board.emit("SequenceStarted", { sequence: game.sequence, sequenceDuration: game.sequenceDuration });
 }
 
 function runSequence()
 {
 	game.sequenceRunTimestamp = Date.now();
 	setGameState(gameState.RUNNING);
-	setTimeout(function () { completeSequence(); }, 3500 + (game.sequence.length * 750));
+	setTimeout(function () { completeSequence(); }, game.sequenceDuration);
 }
 
 function completeSequence()
 {
+	namespaces.board.emit("SequenceCompleted");
+	
 	var activePlayers = [];
-
+	var sequenceWinner = null;
+	
 	for (var socketId in game.players)
 	{
 		var player = game.players[socketId];
-		if (player.errors < 3 && !player.isSequenceCompleted)
+		if (player.errors < 3)
 		{
-			player.errors++;
-			player.isSequenceCompleted = true;
-			updatePlayer(player);
+			if (player.isSequenceCompleted)
+			{
+				if (sequenceWinner == null || player.stats.lastSequenceDuration < sequenceWinner.lastSequenceDuration)
+				{
+					sequenceWinner = player; 
+				}
+			}
+			else
+			{
+				player.errors += 1;
+				player.isSequenceCompleted = true;
+				updatePlayer(player);
+			}
+			if (player.errors < 3)
+			{
+				activePlayers.push(player);
+			}
 		}
-		if (player.errors < 3) { activePlayers.push(player.number); }
 	}
+	
+	if (sequenceWinner != null && sequenceWinner.errors > 0) 
+	{
+		sequenceWinner.errors -= 1;
+	}
+	
 	updatePlayersToBoard();
-	namespaces.board.emit("SequenceCompleted", activePlayers);
-
-	setGameState((activePlayers.length > 0) ? gameState.READY : gameState.COMPLETED);
+	
+	if (sequenceWinner != null) 
+	{
+		namespaces.board.emit("SequenceWon", sequenceWinner.number);
+	}
+	
+	switch (activePlayers.length)
+	{
+		case 1:
+			setGameState(gameState.COMPLETED);
+			namespaces.board.emit("GameWon", activePlayers[0].number);
+			break;
+		case 0:
+			setGameState(gameState.COMPLETED);
+			break;
+		default:
+			setGameState(gameState.READY);
+			break;
+	}
 }
 
 function setGameState(state)
