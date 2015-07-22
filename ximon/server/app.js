@@ -38,11 +38,12 @@ var __player =
 	sequenceIndex: 0,
 	isSequenceCompleted: false,
 	stats: { lastSequenceDuration: 0 },
-	isConnected: false
+	isConnected: false,
+	userAgent: null
 };
 
 namespaces.player.on("connection", function (socket)
-{
+{	
 	socket.on("RegisterPlayer", function (id, callback)
 	{
 		if (id == null)
@@ -56,6 +57,7 @@ namespaces.player.on("connection", function (socket)
 		player.id = id;
 		player.socketId = socket.id;
 		player.isConnected = true;
+		player.userAgent = socket.handshake.headers["user-agent"];
 
 		var _player = getPlayerById(id);
 			
@@ -190,7 +192,7 @@ function startSequence()
 	}
 	updatePlayersToBoard();
 	game.sequence.push(Math.floor((Math.random() * 4) + 1));
-	game.sequenceDuration = 3000 + (game.sequence.length * 750); 
+	game.sequenceDuration = 2500 + (game.sequence.length * 500); 
 	setGameState(gameState.STARTING);
 	namespaces.board.emit("SequenceStarted", { sequence: game.sequence, sequenceDuration: game.sequenceDuration });
 }
@@ -212,31 +214,32 @@ function completeSequence()
 	for (var socketId in game.players)
 	{
 		var player = game.players[socketId];
-		if (player.errors < 3)
+		if (player.errors < 3) 
 		{
-			if (player.isSequenceCompleted)
-			{
-				if (sequenceWinner == null || player.stats.lastSequenceDuration < sequenceWinner.lastSequenceDuration)
-				{
-					sequenceWinner = player; 
-				}
-			}
-			else
+			if (!player.isSequenceCompleted)
 			{
 				player.errors += 1;
 				player.isSequenceCompleted = true;
 				updatePlayer(player);
 			}
-			if (player.errors < 3)
-			{
-				activePlayers.push(player);
-			}
 		}
+		if (player.errors < 3)
+		{
+			if (player.isSequenceCompleted && player.stats.lastSequenceDuration > 0)
+			{
+				if (sequenceWinner == null || player.stats.lastSequenceDuration < sequenceWinner.stats.lastSequenceDuration)
+				{
+					sequenceWinner = player; 
+				}
+			}
+			activePlayers.push(player);	
+		}		
 	}
 	
 	if (sequenceWinner != null && sequenceWinner.errors > 0) 
 	{
 		sequenceWinner.errors -= 1;
+		updatePlayer(sequenceWinner);
 	}
 	
 	updatePlayersToBoard();
@@ -245,7 +248,7 @@ function completeSequence()
 	{
 		namespaces.board.emit("SequenceWon", sequenceWinner.number);
 	}
-	
+
 	switch (activePlayers.length)
 	{
 		case 1:

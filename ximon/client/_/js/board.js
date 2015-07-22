@@ -59,7 +59,7 @@ board.init = function ()
 		if (player.length == 0)
 		{
 			player = board.playerTemplate.clone();
-			player.appendTo("#players");
+			player.appendTo("#players");			
 			player.find(".number").html(_player.number);
 			player.velocity({ translateY: 100 }, { duration: 0 }).velocity({ translateY: 0 }, { duration: 750, easing: "spring" });
 		}
@@ -70,7 +70,32 @@ board.init = function ()
 		player.find(".stats").html(_player.stats.lastSequenceDuration / 1000 + "s");
 		player.find(".stats").toggleClass("success", (_player.stats.lastSequenceDuration > 0));
 		player.toggleClass("disabled", _player.errors == 3);
-		player.toggleClass("disconnected", !_player.isConnected);	
+		player.toggleClass("disconnected", !_player.isConnected);
+
+		var device = "html5";
+		var devices = ["Windows Phone", "Android", "iPhone"];
+		for (var i = 0, ic = devices.length; i < ic; i += 1)
+		{	
+			if (new RegExp(devices[i]).test(_player.userAgent))
+			{
+				switch (devices[i])
+				{
+					case "Windows Phone":
+						device = "windows";
+						break;
+					case "Android":
+						device = "android";
+						break;	
+					case "iPhone":
+						device = "ios";
+						break;
+					default:
+						break;
+				}
+				break;
+			}
+		}
+		player.find(".device .icon").find("use").attr("xlink:href", "#icon-device-" + device);
 	};
 
 	board.io.on("ButtonPressed", function (args) 
