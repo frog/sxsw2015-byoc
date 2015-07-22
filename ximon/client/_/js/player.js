@@ -99,7 +99,7 @@ player.register = function ()
 		}
 		catch (e)
 		{
-			cookieStorage.setItem("id", id, Infinity, "/", "byoc.sxsw", false);
+			cookieStorage.setItem("id", id, Infinity, "/", null, false);
 		}
 	});
 };
