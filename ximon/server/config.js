@@ -4,7 +4,7 @@ var config =
 	webRootDirName: "client",
 	defaultDocument: "player.htm",
 	isCachingDisabled: false,
-	isLogOutputEnabled: false,
+	isLogOutputEnabled: true,
 	doBrowserLaunch: false,
 	contentTypes:
 	{
