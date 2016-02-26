@@ -1,6 +1,6 @@
 {
 	"name": "Ximon",
 	"dependencies": {
-		"SoundJS": ">=0.6.1"
+		"SoundJS": ">=0.6.2"
 	}
 }
