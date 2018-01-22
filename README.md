@@ -4,15 +4,11 @@ An group interactive game prototype and demonstration as part of "BYOC" With a P
 
 http://schedule.sxsw.com/2015/events/event_IAP36424
 
-Adapted From Packaged Node Web Server
-
-https://github.com/frog/packaged-node-web-server
-
 # Getting Started
 
-* Requires node, npm, and bower to be installed globally 
+* Requires node and npm to be installed globally 
 * From the server directory, run "npm install"
-* From the client/_/js/lib directory, run "npm install" and "bower install"
+* From the client/_/js/lib directory, run "npm install"
 * From the server directory, run "node server.js"
 
 # How To Use & Play

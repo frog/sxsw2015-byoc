@@ -13,22 +13,18 @@ var gameState =
 	COMPLETED: 5
 };
 
-var soundJs = window.createjs.Sound;
+var sounds =
+[
+  new Howl({ src: ["/_/sounds/1.mp3"] }),
+  new Howl({ src: ["/_/sounds/2.mp3"] }),
+  new Howl({ src: ["/_/sounds/3.mp3"] }),
+  new Howl({ src: ["/_/sounds/4.mp3"] })
+];
 
 board.init = function ()
 {	
 	board.playerTemplate = $("#players .template").clone().toggleClass("template", false);
 	$("#players .template").remove();
-	
-	soundJs.registerSounds(
-		[
-			{src: "1.mp3", id: "1"},
-			{src: "2.mp3", id: "2"},
-			{src: "3.mp3", id: "3"},
-			{src: "4.mp3", id: "4"}
-		],
-		"/_/sounds/"
-	);
 
 	board.io = window.io("/board");
 
@@ -128,8 +124,8 @@ board.init = function ()
 					}, 750);
 					return;
 				}
-				var id = game.sequence.shift();
-				soundJs.play(id);
+        var id = game.sequence.shift();
+        sounds[id - 1].play();
 				var button = $("#sequence .button:nth-child(" + id + ")");
 				button.toggleClass("active", true);
 				setTimeout(function () { button.toggleClass("active", false); }, 300 - (accel * 3));
@@ -143,10 +139,10 @@ board.init = function ()
 		$("#sequence").toggleClass("hidden", false);
 		$("#sequence .button").toggleClass("active", true);
 		$("#sequence .button").velocity({ rotateZ: "360deg" }).velocity("reverse");
-		soundJs.play(1);
-		soundJs.play(2);
-		soundJs.play(3);
-		soundJs.play(4);
+    sounds[0].play();
+    sounds[1].play();
+    sounds[2].play();
+    sounds[3].play();
 		setTimeout(function ()
 		{
 			$("#sequence").toggleClass("hidden", true);

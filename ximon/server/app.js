@@ -1,6 +1,6 @@
 var io = require("socket.io")();
-var uuid = require("node-uuid");
-var extend = require("node.extend");
+var uuid = require("uuid");
+var extend = require("extend");
 
 var log = require("./log.js");
 
