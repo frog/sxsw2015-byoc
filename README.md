@@ -6,10 +6,10 @@ http://schedule.sxsw.com/2015/events/event_IAP36424
 
 # Getting Started
 
-* Requires node and npm to be installed globally 
-* From the server directory, run "npm install"
-* From the client/_/js/lib directory, run "npm install"
-* From the server directory, run "node server.js"
+* Requires node and yarn to be installed globally 
+* From the server directory, run `yarn install`
+* From the client/_/js/lib directory, run `yarn install`
+* From the server directory, run `yarn start`
 
 # How To Use & Play
 

@@ -18,7 +18,8 @@ var sounds =
   new Howl({ src: ["/_/sounds/1.mp3"] }),
   new Howl({ src: ["/_/sounds/2.mp3"] }),
   new Howl({ src: ["/_/sounds/3.mp3"] }),
-  new Howl({ src: ["/_/sounds/4.mp3"] })
+  new Howl({ src: ["/_/sounds/4.mp3"] }),
+  new Howl({ src: ["/_/sounds/5.mp3"] })
 ];
 
 board.init = function ()
@@ -124,8 +125,8 @@ board.init = function ()
 					}, 750);
 					return;
 				}
-        var id = game.sequence.shift();
-        sounds[id - 1].play();
+				var id = game.sequence.shift();
+				sounds[id - 1].play();
 				var button = $("#sequence .button:nth-child(" + id + ")");
 				button.toggleClass("active", true);
 				setTimeout(function () { button.toggleClass("active", false); }, 300 - (accel * 3));
@@ -139,10 +140,7 @@ board.init = function ()
 		$("#sequence").toggleClass("hidden", false);
 		$("#sequence .button").toggleClass("active", true);
 		$("#sequence .button").velocity({ rotateZ: "360deg" }).velocity("reverse");
-    sounds[0].play();
-    sounds[1].play();
-    sounds[2].play();
-    sounds[3].play();
+		sounds[4].play();
 		setTimeout(function ()
 		{
 			$("#sequence").toggleClass("hidden", true);

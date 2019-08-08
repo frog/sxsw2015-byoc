@@ -4,13 +4,16 @@
 	"private": true,
 	"repository": "https://github.com/frog/sxsw2015-byoc",
 	"engines": {
-		"node": ">= 8.9.4"
+		"node": ">= 12.6.0"
 	},
 	"author": "Robert Tuttle (frog)",
 	"license": "MIT",
+	"scripts": {
+		"start": "node server.js"
+	  },
 	"devDependencies": {
-		"extend": ">=3.0.1",
-		"uuid": ">=3.2.1",
-		"socket.io": ">=2.0.3"
+		"extend": ">=3.0.2",
+		"uuid": ">=3.3.2",
+		"socket.io": ">=2.2.0"
 	}
 }
