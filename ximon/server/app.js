@@ -97,52 +97,55 @@ namespaces.player.on("connection", function (socket)
 		
 		var player = game.players[socket.id];
 
-		if (player.errors < 3)
+		if (player) 
 		{
-			switch (game.state)
+			if (player.errors < 3)
 			{
-				case gameState.WAITING:
-					namespaces.board.emit("ButtonPressed",
-					{
-						playerNumber: player.number,
-						buttonId: buttonId
-					});
-					break;
-
-				case gameState.RUNNING:
-					if (!player.isSequenceCompleted)
-					{
+				switch (game.state)
+				{
+					case gameState.WAITING:
 						namespaces.board.emit("ButtonPressed",
 						{
 							playerNumber: player.number,
 							buttonId: buttonId
 						});
+						break;
 
-						if (buttonId == game.sequence[player.sequenceIndex])
+					case gameState.RUNNING:
+						if (!player.isSequenceCompleted)
 						{
-							player.sequenceIndex += 1;
-							if (player.sequenceIndex == game.sequence.length)
+							namespaces.board.emit("ButtonPressed",
 							{
+								playerNumber: player.number,
+								buttonId: buttonId
+							});
+
+							if (buttonId == game.sequence[player.sequenceIndex])
+							{
+								player.sequenceIndex += 1;
+								if (player.sequenceIndex == game.sequence.length)
+								{
+									player.isSequenceCompleted = true;
+									player.stats.lastSequenceDuration = Date.now() - game.sequenceRunTimestamp;
+								}
+							}
+							else
+							{
+								player.errors += 1;
 								player.isSequenceCompleted = true;
-								player.stats.lastSequenceDuration = Date.now() - game.sequenceRunTimestamp;
+							}
+
+							if (player.isSequenceCompleted)
+							{
+								updatePlayerToBoard(socket.id);
+								updatePlayer(player);
 							}
 						}
-						else
-						{
-							player.errors += 1;
-							player.isSequenceCompleted = true;
-						}
+						break;
 
-						if (player.isSequenceCompleted)
-						{
-							updatePlayerToBoard(socket.id);
-							updatePlayer(player);
-						}
-					}
-					break;
-
-				default:
-					break;
+					default:
+						break;
+				}
 			}
 		}
 	});
