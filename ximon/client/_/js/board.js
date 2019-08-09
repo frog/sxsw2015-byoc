@@ -19,7 +19,7 @@ var sounds =
   new Howl({ src: ["/_/sounds/2.mp3"], volume: 1.0 }),
   new Howl({ src: ["/_/sounds/3.mp3"], volume: 1.0 }),
   new Howl({ src: ["/_/sounds/4.mp3"], volume: 1.0 }),
-  new Howl({ src: ["/_/sounds/5.mp3"], volume: 0.5 })
+  new Howl({ src: ["/_/sounds/5.mp3"], volume: 0.25 })
 ];
 
 board.init = function ()
