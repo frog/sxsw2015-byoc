@@ -9,7 +9,7 @@ http://schedule.sxsw.com/2015/events/event_IAP36424
 * Requires node and yarn to be installed globally 
 * From the server directory, run `yarn install`
 * From the client/_/js/lib directory, run `yarn install`
-* From the server directory, run `yarn start`
+* From the server directory, run `yarn start` (as Administrator or sudo as needed per your host OS)
 
 # How To Use & Play
 
