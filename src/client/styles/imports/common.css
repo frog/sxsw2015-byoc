@@ -1,0 +1,39 @@
+@import "../../../../node_modules/normalize.css/normalize.css";
+@import "colors.css";
+
+* {
+	font-family: sans-serif !important;
+	-webkit-font-smoothing: antialiased !important;
+	-webkit-tap-highlight-color: transparent;
+}
+
+:root {
+	background-color: var(--color-background);
+	color: var(--color-foreground);
+}
+
+html, body {
+	width: 100%;
+	height: 100%;
+  touch-action: none;
+	display: flex;
+}
+
+main {
+	flex: 1;
+	display: flex;
+}
+
+.icon {
+	display: inline-block;
+}
+
+.template {
+	display: none !important;
+}
+
+.disabled {
+  pointer-events: none;
+	opacity: .25;
+  transition: opacity 333ms ease-out;
+}

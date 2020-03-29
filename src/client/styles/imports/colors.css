@@ -1,0 +1,17 @@
+:root {
+  --color-background: var(--_color-black);
+  --color-foreground: var(--_color-white);
+
+  --_color-black: #000000;
+  --_color-shadow: #1C1C1C;
+  --_color-charcoal: #333333;
+  --_color-smoke: #666666;
+  --_color-grey: #CCCCCC;
+  --_color-white: #FFFFFF;
+  --_color-red: #CC0000;
+  --_color-green: #00FF00;
+  --_color-blue: #0000FF;
+  --_color-yellow: #FFFF00;
+
+  --_color-black80: color(#000000 alpha(-20%));
+}

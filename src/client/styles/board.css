@@ -1,0 +1,295 @@
+@import "imports/common.css";
+
+main {
+	position: relative;
+}
+
+#players {
+	flex: 0 1 auto;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	margin: 2.5em 1em 1em 2.5em;
+
+	& .player {
+		flex: 0 1 auto;
+		display: flex;
+		margin: 0 3em .25em 0;
+
+		& .number {
+			flex: 0 1 auto;
+			width: 42px;
+			height: 42px;
+			line-height: 42px;
+			margin-right: .75em;
+			border-radius: 21px;
+			text-align: center;
+			vertical-align: middle;
+			font-size: 24px;
+			font-weight: bold;
+			background-color: var(--color-background);
+			color: var(--_color-black);
+			transition: background-color 333ms ease-out;
+		}
+
+		& .buttons {
+			flex: 0 1 auto;
+			flex-direction: row;
+			display: flex;
+			position: relative;
+			margin-right: .75em;
+
+			& .button {
+				flex: 0 1 auto;
+				width: 42px;
+				height: 42px;
+				margin-right: .5em;
+				padding: 0;
+				outline: none;
+				border: none;
+				border-radius: 3px;
+				opacity: .333;
+				transform: scale(1) translate3d(0,0,0);
+				transition: opacity 200ms ease-out, transform 200ms ease-out;
+				backface-visibility: hidden;
+				cursor: default;	
+		
+				&.active {
+					opacity: 1;
+					transform: scale(1.05) translate3d(0,0,0);
+					transition: opacity 0, transform 0;
+				}
+			}
+
+			& .green {
+				background-color: var(--_color-green);
+				&.active {
+					box-shadow: 0 0 30px 3px var(--_color-green);
+				}
+			}
+
+			& .red {
+				background-color: var(--_color-red);
+				&.active {
+					box-shadow: 0 0 30px 3px var(--_color-red);
+				}
+			}
+
+			& .yellow {
+				background-color: var(--_color-yellow);
+				&.active {
+					box-shadow: 0 0 30px 3px var(--_color-yellow);
+				}
+			}
+
+			& .blue {
+				background-color: var(--_color-blue);
+				&.active {
+					box-shadow: 0 0 30px 3px var(--_color-blue);
+				}
+			}
+		}
+
+		& .errors {
+			flex: 0 1 auto;
+			display: flex;
+			flex-direction: row;
+			margin-right: .75em;
+
+			& .icon {
+				width: 42px;
+				height: 42px;
+				margin-right: 5px;
+				fill: var(--_color-smoke);
+				transition: fill 333ms ease-out;
+			}
+
+			& .enabled {
+				fill: var(--_color-red);
+			}
+		}
+
+		& .stats {
+			flex: 0 1 auto;
+			width: 100px;
+			height: 42px;
+			line-height: 42px;
+			margin-right: .75em;
+			text-align: center;
+			vertical-align: middle;
+			font-size: 20px;
+			font-weight: bold;
+			color: var(--_color-grey);
+			background-color: var(--_color-shadow);
+			transition: background-color 1500ms ease-out;
+		}
+		
+		& .device {
+			height: 42px;
+      line-height: 42px;
+      
+			& .icon {
+				width: 26px;
+				height: 26px;
+				fill: var(--_color-smoke);
+				vertical-align: middle;
+			}
+		}
+
+		& .success {
+			background-color: var(--_color-green);
+			color: var(--_color-black);
+		}
+	}
+
+	& .disconnected {
+		& .number {
+			background-color: var(--_color-shadow);
+			color: var(--_color-smoke);
+		}
+	}
+}
+
+#sequence {
+	flex: 0 1 auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--_color-black80);
+	transition: opacity 333ms ease-out;
+
+	&.hidden {
+		opacity: 0;
+	}
+
+	& .buttons {
+		flex: 0 1 auto;
+		flex-basis: 520px;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		
+		& .button {
+			flex: 0 1 auto;
+			width: 240px;
+			height: 240px;
+			margin: 10px;
+			padding: 0;
+			outline: none;
+			border: none;
+			border-radius: 10px;
+			opacity: .333;
+			transform: scale(1) translate3d(0,0,0);
+			transition: opacity 200ms ease-out, transform 200ms ease-out;
+			backface-visibility: hidden;
+			cursor: default;	
+		
+			&.active {
+				opacity: 1;
+				transform: scale(1.05) translate3d(0,0,0);
+				transition: opacity 0, transform 0;
+			}
+		}
+
+		& .green {
+			background-color: var(--_color-green);
+			&.active {
+				box-shadow: 0 0 30px 3px var(--_color-green);
+			}
+		}
+
+		& .red {
+			background-color: var(--_color-red);
+			&.active {
+				box-shadow: 0 0 30px 3px var(--_color-red);
+			}
+		}
+
+		& .yellow {
+			background-color: var(--_color-yellow);
+			&.active {
+				box-shadow: 0 0 30px 3px var(--_color-yellow);
+			}
+		}
+
+		& .blue {
+			background-color: var(--_color-blue);
+			&.active {
+				box-shadow: 0 0 30px 3px var(--_color-blue);
+			}
+		}
+	}
+
+	& .count {
+		flex: 0 1 auto;
+		width: 520px;
+		transform: translateY(100px);
+		margin-bottom: -2em;
+		color: var(--_color-white);
+		font-size: 80px;
+		text-align: center;
+	}
+}
+
+#countdown {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 2em;
+	background-color: var(--_color-grey);
+	transform: translateX(-100%);
+}
+
+#winner {
+	flex: 0 1 auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	transition: opacity 333ms ease-out;
+
+	&.hidden {
+		opacity: 0;
+	}
+
+	& .number {
+		flex: 0 1 auto;
+		width: 512px;
+		height: 512px;
+		line-height: 512px;
+		border-radius: 256px;
+		text-align: center;
+		vertical-align: middle;
+		font-size: 220px;
+		font-weight: bold;
+		background-color: var(--_color-grey);
+		color: var(--_color-black);
+	}
+}
+
+#watermark {
+	position: absolute;
+	right: .5em;
+	bottom: .25em;
+	color: var(--_color-white);
+	font-size: 160px;
+	text-align: right;
+	opacity: .333;
+
+	&.hidden {
+		opacity: 0;
+	}
+}

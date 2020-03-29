@@ -1,0 +1,114 @@
+@import "imports/common.css";
+
+#player {
+	flex: 1;
+	display: flex;
+	@media screen and (orientation:portrait) {
+		flex-direction: column;
+	}
+	@media screen and (orientation:landscape) {
+		flex-direction: row;
+	}
+	justify-content: center;
+	align-items: center;
+
+	& #number {
+		flex: 0 1 auto;
+		width: 52px;
+		height: 52px;
+		line-height: 52px;
+		border-radius: 100%;
+		text-align: center;
+		font-size: 28px;
+		font-weight: bold;
+		background-color: var(--_color-grey);
+		color: var(--_color-black);
+	}
+
+	& #buttons {
+		flex: 0 1 auto;
+		flex-basis: 240px;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		width: 240px;
+		height: 240px;
+		margin: 1.5em;
+
+		& button {
+			flex: 0 1 auto;
+			width: 100px;
+			height: 100px;
+			margin: 10px;
+			padding: 0;
+			outline: none;
+			border: none;
+      border-radius: 10px;
+      backface-visibility: hidden;
+			opacity: .333;
+			transform: scale(1) translate3d(0,0,0);
+			transition: opacity 100ms ease-out, transform 100ms ease-out;	
+		
+			&.active {
+				opacity: 1;
+				transform: scale(1.05) translate3d(0,0,0);
+				transition: opacity 0, transform 0;
+      }
+      
+      &.green {
+        background-color: var(--_color-green);
+        &.active {
+          box-shadow: 0 0 30px 3px var(--_color-green);
+        }
+      }
+  
+      &.red {
+        background-color: var(--_color-red);
+        &.active {
+          box-shadow: 0 0 30px 3px var(--_color-red);
+        }
+      }
+  
+      &.yellow {
+        background-color: var(--_color-yellow);
+        &.active {
+          box-shadow: 0 0 30px 3px var(--_color-yellow);
+        }
+      }
+  
+      &.blue {
+        background-color: var(--_color-blue);
+        &.active {
+          box-shadow: 0 0 30px 3px var(--_color-blue);
+        }
+      }
+		}
+	}
+
+	& #errors {
+		flex: 0 1 auto;
+		display: flex;
+		@media screen and (orientation:portrait) {
+			flex-direction: row;
+			width: 156px;
+			height: 52px;
+		}
+		@media screen and (orientation:landscape) {
+			flex-direction: column;
+			width: 52px;
+			height: 156px;
+		}
+
+		& svg {
+			width: 32px;
+			height: 32px;
+			margin: 10px;
+			fill: var(--_color-shadow);
+			transition: fill 333ms ease-out;
+			
+			&.enabled {
+				fill: var(--_color-red);
+			}
+		}
+	}
+}
